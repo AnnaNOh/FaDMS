@@ -12,9 +12,9 @@
 ## Functionality and MVPs
    In FaDMS, users will be able to:
 
-  -[ ] see the difference in foreign and domestic box office success for their favorite movies
-  -[ ] hover over the movie to see a detailed breakdown of the movie's stats
-  -[ ] choose selectors such as genre, franchises, IMDb Top 250, and Oscar Best Picture winners
+  - [ ] see the difference in foreign and domestic box office success for their favorite movies
+  - [ ] hover over the movie to see a detailed breakdown of the movie's stats
+  - [ ] choose selectors such as genre, franchises, IMDb Top 250, and Oscar Best Picture winners
 
 
 ## Wireframes
@@ -39,15 +39,15 @@ There will be 2 scripts involved in this project:
 
 ## Implementation Timeline
 #### Over the weekend:
--[ ] Research D3 and run through its tutorial
+- [ ] Research D3 and run through its tutorial
 #### Day 1:
--[ ] Set up index.html and render base of graph (Circles and Axis)
+- [ ] Set up index.html and render base of graph (Circles and Axis)
 #### Day 2:
--[ ] Retrieve IMDB API or The Numbers' API and have selected group show
+- [ ] Retrieve IMDB API or The Numbers' API and have selected group show
 #### Day 3:
--[ ] Render hover data for each movie
+- [ ] Render hover data for each movie
 #### Day 4:
--[ ] CSS for the website
+- [ ] CSS for the website
 #### Bonus Features
--[ ] Scrollbar for minimum Gross Revenue
--[ ] Selector for different movie studios
+- [ ] Scrollbar for minimum Gross Revenue
+- [ ] Selector for different movie studios
