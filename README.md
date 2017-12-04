@@ -22,7 +22,7 @@
 
   When a user hovers over a point, the movie's name and information will pop up.
 
-![Wireframe](./Images/JavaScript Project Wireframe.png)
+![Wireframe](http://res.cloudinary.com/annaoh/image/upload/v1512370298/JavaScript_Project_Wireframe_reumum.png)
 
 
 ## Architecture and Technologies
@@ -32,9 +32,9 @@ This project will be implemneted with the following technologies:
 * Webpack to bundle
 
 There will be 2 scripts involved in this project:
-`movie.js` - deals with each individual movie item
-`selector.js` - deals with handling which group to call (Oscar Winners, IMDb 250, Franchises, All, etc)
-`graph.js` - handles calculations and graph rendering
+* `movie.js` - deals with each individual movie item
+* `selector.js` - deals with handling which group to call (Oscar Winners, IMDb 250, Franchises, All, etc)
+* `graph.js` - handles calculations and graph rendering
 
 
 ## Implementation Timeline
