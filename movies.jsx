@@ -1,6 +1,8 @@
 import * as d3 from "d3";
 import _ from 'lodash';
 
+
+
 const margin = {top: 100, right: 50, bottom: 50, left: 140};
 const width = 1200 - margin.left - margin.right,
       height = 620 - margin.top - margin.bottom;
@@ -13,10 +15,15 @@ const svg = d3.select("body")
                 .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
+const tooltip = d3.select("body")
+                  .append("div")
+                  .attr("id", "tooltip");
+
 
 // set the ranges
 var x = d3.scaleLinear().rangeRound([0, width]);
 var y = d3.scaleLinear().rangeRound([0, height]);
+
 
 // get data from csv
 let AllMovieInfo = [];
@@ -54,21 +61,37 @@ function ready(error, movies){
     AllMovieInfo.push(MovieItem);
   });
 
+  // Scale the data's range
   let maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
-// Scale the data's range
-  x.domain([1960, 2017]);
+  x.domain([1963, 2017]);
   y.domain([maxY, 0]);
-  // y.domain([d3.max(movies, function(d) { return d.PerFRevenue; }), 0]).range([0, height]);
 
 // Making the scatterplot
+  let logscale = 10000000;
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
   .enter()
   .append("circle")
-  .attr("r", 5)
+  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 20); })
   .attr("cx", function(d) { return (d.AYear); })
-  .attr("cy", function(d) { return height - (d.PerFRevenue/maxY*height); });
+  .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
+  .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#C13522')
+  .on('mouseover', (d) => {
+    tooltip.transition()
+      .duration(100)
+      .style('opacity', .9);
+    tooltip.text(`Ranking: ${d.Place} - ${d.Name} - Year ${d.Year} - Time: ${d.Time}`)
+      .style('left', `${d3.event.pageX + 2}px`)
+      .style('top', `${d3.event.pageY - 18}px`);
+  })
+  .on('mouseout', () => {
+    tooltip.transition()
+    .duration(400)
+    .style('opacity', 0);
+  });
+
+
 
   // Add the X Axis
   svg.append("g")
@@ -81,13 +104,14 @@ function ready(error, movies){
       .attr("y", 5)
       .text("Year");
 
-
   // Add the Y Axis
   svg.append("g")
       .call(d3.axisLeft(y))
       .append("text")
+      .attr('transform', 'rotate(-90)')
       .attr("fill", "#000")
-      .attr("y", -8)
+      .attr("x", "-12em")
+      .attr("y", "-3.5em")
       .text("Percent of Gross Box Office from Foreign Markets");
 
 }

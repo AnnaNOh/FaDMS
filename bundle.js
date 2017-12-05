@@ -9439,11 +9439,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
 const margin = {top: 100, right: 50, bottom: 50, left: 140};
 const width = 1200 - margin.left - margin.right,
       height = 620 - margin.top - margin.bottom;
 
-const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
+const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* select */]("body")
               .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
@@ -9451,14 +9453,19 @@ const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
                 .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
+const tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* select */]("body")
+                  .append("div")
+                  .attr("id", "tooltip");
+
 
 // set the ranges
-var x = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().rangeRound([0, width]);
-var y = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().rangeRound([0, height]);
+var x = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* scaleLinear */]().rangeRound([0, width]);
+var y = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* scaleLinear */]().rangeRound([0, height]);
+
 
 // get data from csv
 let AllMovieInfo = [];
-__WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
+__WEBPACK_IMPORTED_MODULE_0_d3__["f" /* queue */]()
   .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* csv */], "data/imdb250.csv")
   .await(ready);
 
@@ -9492,21 +9499,37 @@ function ready(error, movies){
     AllMovieInfo.push(MovieItem);
   });
 
-  let maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* max */](movies, function(d) { return d.PerFRevenue; });
-// Scale the data's range
-  x.domain([1960, 2017]);
+  // Scale the data's range
+  let maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* max */](movies, function(d) { return d.PerFRevenue; });
+  x.domain([1963, 2017]);
   y.domain([maxY, 0]);
-  // y.domain([d3.max(movies, function(d) { return d.PerFRevenue; }), 0]).range([0, height]);
 
 // Making the scatterplot
+  let logscale = 10000000;
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
   .enter()
   .append("circle")
-  .attr("r", 5)
+  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 20); })
   .attr("cx", function(d) { return (d.AYear); })
-  .attr("cy", function(d) { return height - (d.PerFRevenue/maxY*height); });
+  .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
+  .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#C13522')
+  .on('mouseover', (d) => {
+    tooltip.transition()
+      .duration(100)
+      .style('opacity', .9);
+    tooltip.text(`Ranking: ${d.Place} - ${d.Name} - Year ${d.Year} - Time: ${d.Time}`)
+      .style('left', `${__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* event */].pageX + 2}px`)
+      .style('top', `${__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* event */].pageY - 18}px`);
+  })
+  .on('mouseout', () => {
+    tooltip.transition()
+    .duration(400)
+    .style('opacity', 0);
+  });
+
+
 
   // Add the X Axis
   svg.append("g")
@@ -9519,13 +9542,14 @@ function ready(error, movies){
       .attr("y", 5)
       .text("Year");
 
-
   // Add the Y Axis
   svg.append("g")
       .call(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* axisLeft */](y))
       .append("text")
+      .attr('transform', 'rotate(-90)')
       .attr("fill", "#000")
-      .attr("y", -8)
+      .attr("x", "-12em")
+      .attr("y", "-3.5em")
       .text("Percent of Gross Box Office from Foreign Markets");
 
 }
@@ -9533,7 +9557,7 @@ function ready(error, movies){
 
 
 
-
+// How about this
 
 
 
@@ -9659,7 +9683,7 @@ function ready(error, movies){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__build_package__ = __webpack_require__(173);
 /* unused harmony reexport version */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_array__ = __webpack_require__(3);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["d"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["d"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_axis__ = __webpack_require__(190);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["a"]; });
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["b"]; });
@@ -9696,15 +9720,16 @@ function ready(error, movies){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_d3_quadtree__ = __webpack_require__(68);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_d3_queue__ = __webpack_require__(380);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_d3_random__ = __webpack_require__(383);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_d3_request__ = __webpack_require__(388);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_d3_scale__ = __webpack_require__(395);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_d3_selection__ = __webpack_require__(1);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_d3_shape__ = __webpack_require__(428);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_d3_time__ = __webpack_require__(44);
