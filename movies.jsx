@@ -81,7 +81,7 @@ function ready(error, movies){
     tooltip.transition()
       .duration(100)
       .style('opacity', .9);
-    tooltip.text(`Ranking: ${d.Place} - ${d.Name} - Year ${d.Year} - Time: ${d.Time}`)
+    tooltip.text(`${d.Movie}(${d.Year})  \nTotal Box Office: $${d.WWBO} \nForeign Box Office: #${d.ForBO}`)
       .style('left', `${d3.event.pageX + 2}px`)
       .style('top', `${d3.event.pageY - 18}px`);
   })
