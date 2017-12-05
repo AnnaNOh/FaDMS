@@ -9445,7 +9445,7 @@ const margin = {top: 100, right: 50, bottom: 50, left: 140};
 const width = 1200 - margin.left - margin.right,
       height = 620 - margin.top - margin.bottom;
 
-const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* select */]("body")
+const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
               .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
@@ -9453,19 +9453,29 @@ const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* select */]("body")
                 .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
-const tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* select */]("body")
+const tooltipAll = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
+                  .append("div")
+                  .attr("id", "tooltipAll");
+
+const tooltip = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("#tooltipAll")
                   .append("div")
                   .attr("id", "tooltip");
+const tooltip2 = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("#tooltipAll")
+                  .append("div")
+                  .attr("id", "tooltip2");
+const tooltip3 = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("#tooltipAll")
+                  .append("div")
+                  .attr("id", "tooltip3");
 
 
 // set the ranges
-var x = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* scaleLinear */]().rangeRound([0, width]);
-var y = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* scaleLinear */]().rangeRound([0, height]);
+var x = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().rangeRound([0, width]);
+var y = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().rangeRound([0, height]);
 
 
 // get data from csv
 let AllMovieInfo = [];
-__WEBPACK_IMPORTED_MODULE_0_d3__["f" /* queue */]()
+__WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
   .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* csv */], "data/imdb250.csv")
   .await(ready);
 
@@ -9500,12 +9510,17 @@ function ready(error, movies){
   });
 
   // Scale the data's range
-  let maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* max */](movies, function(d) { return d.PerFRevenue; });
-  x.domain([1963, 2017]);
+  let maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* max */](movies, function(d) { return d.PerFRevenue; });
+  x.domain([1962, 2017]);
   y.domain([maxY, 0]);
 
 // Making the scatterplot
   let logscale = 10000000;
+  let tooltipLeft = (d) => margin.left + d.AYear;
+  let tooltipTop = (d) => margin.top + height - (height * d.PerFRevenue/maxY);
+  let spaceTop = 15;
+  let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
+  let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
@@ -9515,16 +9530,39 @@ function ready(error, movies){
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
   .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#C13522')
+  .style("fill-opacity", 0.5)
   .on('mouseover', (d) => {
     tooltip.transition()
       .duration(100)
       .style('opacity', .9);
-    tooltip.text(`${d.Movie}(${d.Year})  \nTotal Box Office: $${d.WWBO} \nForeign Box Office: #${d.ForBO}`)
-      .style('left', `${__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* event */].pageX + 2}px`)
-      .style('top', `${__WEBPACK_IMPORTED_MODULE_0_d3__["d" /* event */].pageY - 18}px`);
+    tooltip2.transition()
+      .duration(100)
+      .style('opacity', .9);
+    tooltip3.transition()
+      .duration(100)
+      .style('opacity', .9);
+    tooltip.text(`${d.Movie} (${d.Year})`)
+      .style("position", "absolute")
+      .style('left', `${tooltipLeft(d)}px`)
+      .style('top', `${tooltipTop(d)}px`);
+    tooltip2.text(`Foreign Box Office: $${d.ForBO}`)
+      .style("position", "absolute")
+      .style('left', `${tooltipLeft(d)}px`)
+      .style('top', `${tooltipTop2(d)}px`);
+    tooltip3.text(`Total Box Office: $${d.WWBO}`)
+      .style("position", "absolute")
+      .style('left', `${tooltipLeft(d)}px`)
+      .style('top', `${tooltipTop3(d)}px`);
+
   })
   .on('mouseout', () => {
     tooltip.transition()
+    .duration(400)
+    .style('opacity', 0);
+    tooltip2.transition()
+    .duration(400)
+    .style('opacity', 0);
+    tooltip3.transition()
     .duration(400)
     .style('opacity', 0);
   });
@@ -9555,126 +9593,6 @@ function ready(error, movies){
 }
 
 
-
-
-// How about this
-
-
-
-
-
-// var xValue = function(d) { return d.Year; },
-//     xScale = d3.scaleLinear().range([0, width]),
-//     xMap = function(d) { return xScale(xValue(d));},
-//     xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-//
-// var yValue = function(d) { return d.WWBO; },
-//     yScale = d3.scaleLinear().range([height, 0]),
-//     yMap = function(d) { return yScale(yValue(d));},
-//     yAxis = d3.svg.axis().scale(yScale).orient("left");
-//
-// var tooltip = d3.select("#plot")
-//                 .append("div")
-//                 .attr("class", "tooltip")
-//                 .style("opacity, 0");
-//
-// // load data
-// let AllMovieInfo = {};
-// d3.queue().defer(d3.csv, "data/imdb250.csv").await(ready);
-//
-//
-// function ready(error, movies){
-//   if (error) throw error;
-//
-//   let WWBObyMovie = {};
-//   movies.forEach(function(d){
-//     d.Year = Number(d.Year);
-//     d.WWBO = Number(d.WWBO);
-//     WWBObyMovie[d.Movie] = Number(d.WWBO);
-//     AllMovieInfo[d.Movie] = d;
-//     AllMovieInfo[d.Movie].Year = Number(d.Year);
-//   });
-//   xScale.domain([d3.min(movies, xValue)-1, d3.max(movies, xValue)+1]);
-//   yScale.domain([d3.min(movies, yValue)-1, d3.max(movies, yValue)+1]);
-//
-// // x-axis
-// svg.append("g")
-//     .attr("class", "x-axis").attr("transform", "translate(0," + height + ")")
-//     .call(xAxis)
-//     .append("text")
-//     .attr("class", "label")
-//     .attr("x", width)
-//     .attr("y", -6)
-//     .style("text-anchor", "end")
-//     .text("Years");
-//
-// // y-axis
-// svg.append("g")
-//     .attr("class", "y axis")
-//     .call(yAxis)
-//   .append("text")
-//     .attr("class", "label")
-//     .attr("transform", "rotate(-90)")
-//     .attr("y", 6)
-//     .attr("dy", ".71em")
-//     .style("text-anchor", "end")
-//     .text("WWBO");
-//
-// //draw dots
-// svg.selectAll(".dot")
-//       .data(movies)
-//     .enter().append("circle")
-//       .attr("class", "dot")
-//       .attr("r", 3.5)
-//       .attr("cx", xMap)
-//       .attr("cy", yMap)
-//       .on("mouseover", function(d) {
-//           tooltip.transition()
-//                .duration(200)
-//                .style("opacity", .9);
-//           tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
-// 	        + ", " + yValue(d) + ")")
-//                .style("left", (d3.event.pageX + 5) + "px")
-//                .style("top", (d3.event.pageY - 28) + "px");
-//       })
-//       .on("mouseout", function(d) {
-//           tooltip.transition()
-//                .duration(500)
-//                .style("opacity", 0);
-//       });
-// }
-
-
-
-
-// d3.csv("data/imdb250.csv", titles => {
-//   console.log("titles:", titles);
-//   let data = titles.map(function(d){
-//     console.log("d", d);
-//     let t = d.Movie;
-//     console.log("Title:", t);
-//   });
-//   console.log("HELLOOOOOOOO");
-//   console.log(titles[0]);
-//   console.log(titles[0].Movie);
-//   var movt = titles[0].Movie;
-// });
-//
-//
-//   function component() {
-//     var movieslist = document.createElement('ul');
-//     movieslist.innerHTML = _.join(['Hello', 'webpackiuerhgjoietbj'], ' ');
-//     let p = document.createElement("li");
-//     console.log("THEEEEEEEEEE");
-//     console.log(movieTitle());
-//     p.innerHTML = movt;
-//     document.body.appendChild(p);
-//
-//   }
-
-  // document.body.appendChild(component());
-
-
 /***/ }),
 /* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -9683,7 +9601,7 @@ function ready(error, movies){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__build_package__ = __webpack_require__(173);
 /* unused harmony reexport version */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_array__ = __webpack_require__(3);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["d"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["d"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_axis__ = __webpack_require__(190);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["a"]; });
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["b"]; });
@@ -9720,16 +9638,15 @@ function ready(error, movies){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_d3_quadtree__ = __webpack_require__(68);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19_d3_queue__ = __webpack_require__(380);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_19_d3_queue__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20_d3_random__ = __webpack_require__(383);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_d3_request__ = __webpack_require__(388);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_21_d3_request__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22_d3_scale__ = __webpack_require__(395);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_d3_selection__ = __webpack_require__(1);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["b"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_d3_shape__ = __webpack_require__(428);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_d3_time__ = __webpack_require__(44);
