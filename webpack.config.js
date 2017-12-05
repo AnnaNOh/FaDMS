@@ -5,7 +5,7 @@ module.exports = {
   context: __dirname,
   entry: "./movies.jsx",
   output: {
-    path: path.resolve(__dirname, 'app', 'assets', 'javascripts'),
+    path: path.resolve(__dirname),
     filename: "bundle.js"
   },
   devtool: 'source-map',
