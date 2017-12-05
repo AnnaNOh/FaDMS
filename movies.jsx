@@ -28,6 +28,9 @@ const tooltip2 = d3.select("#tooltipAll")
 const tooltip3 = d3.select("#tooltipAll")
                   .append("div")
                   .attr("id", "tooltip3");
+const tooltip4 = d3.select("#tooltipAll")
+                  .append("div")
+                  .attr("id", "tooltip4");
 
 
 // set the ranges
@@ -83,6 +86,7 @@ function ready(error, movies){
   let spaceTop = 15;
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
+  let tooltipTop4 = (d) => spaceTop + tooltipTop3(d);
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
@@ -91,7 +95,8 @@ function ready(error, movies){
   .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 20); })
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
-  .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#C13522')
+  .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#225FC1')
+  // '#C13522'
   .style("fill-opacity", 0.5)
   .on('mouseover', (d) => {
     tooltip.transition()
@@ -103,6 +108,10 @@ function ready(error, movies){
     tooltip3.transition()
       .duration(100)
       .style('opacity', .9);
+    tooltip4.transition()
+      .duration(100)
+      .style('opacity', .9);
+
     tooltip.text(`${d.Movie} (${d.Year})`)
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
@@ -115,7 +124,10 @@ function ready(error, movies){
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
       .style('top', `${tooltipTop3(d)}px`);
-
+    tooltip4.text(`Percent Foreign Revenue: ${d.PerFRevenue}%`)
+      .style("position", "absolute")
+      .style('left', `${tooltipLeft(d)}px`)
+      .style('top', `${tooltipTop4(d)}px`);
   })
   .on('mouseout', () => {
     tooltip.transition()
@@ -125,6 +137,9 @@ function ready(error, movies){
     .duration(400)
     .style('opacity', 0);
     tooltip3.transition()
+    .duration(400)
+    .style('opacity', 0);
+    tooltip4.transition()
     .duration(400)
     .style('opacity', 0);
   });
@@ -138,18 +153,18 @@ function ready(error, movies){
       .append("text")
       .attr("fill", "#000")
       .attr("text-anchor", "start")
-      .attr("x", 1020)
-      .attr("y", 5)
-      .text("Year");
+      .attr("x", "1em")
+      .attr("y", "4em")
+      .text("Year Released");
 
   // Add the Y Axis
   svg.append("g")
-      .call(d3.axisLeft(y))
+      .attr("class", "axisLeft")
+      .call(d3.axisLeft(y).ticks(10, "s"))
       .append("text")
-      .attr('transform', 'rotate(-90)')
+      .text("Percent of Gross Box Office from Foreign Markets")
       .attr("fill", "#000")
-      .attr("x", "-12em")
-      .attr("y", "-3.5em")
-      .text("Percent of Gross Box Office from Foreign Markets");
+      .attr("x", "12em")
+      .attr("y", "-1.5em");
 
 }

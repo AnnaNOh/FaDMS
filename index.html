@@ -10,16 +10,20 @@
       font: 11px sans-serif;
     }
 
-    .axis path,
-    .axis line {
+    .axisLeft path,
+    .axisLeft line {
       fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
+      stroke: none;
     }
 
-    .dot {
-      stroke: #000;
+    .axisLeft .tick line {
+      stroke: black; 
     }
+
+    /*.tick {
+      width: 100px;
+      border-top: 1px solid black;
+    }*/
 
     .tooltip {
       position: absolute;
