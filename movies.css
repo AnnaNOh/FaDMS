@@ -4,7 +4,7 @@ html, body {
 }
 
 body {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 300;
   width: 1200px;
   margin: 0 auto;
@@ -19,6 +19,7 @@ body {
   font-family: "Lora";
   font-weight: 600;
   font-size: 40px;
+  margin-bottom: 0
 }
 .paragraph {
   width: 1000px;
@@ -28,9 +29,11 @@ body {
   font-size: 15px;
 }
 
+.tick > * {
+  font-size: 15px;
+}
+
 .xAxis {
-  /*fill: #666;*/
-  /*stroke: #666;*/
   font-weight: 400;
 }
 

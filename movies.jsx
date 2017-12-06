@@ -5,7 +5,7 @@ function round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
-const margin = {top: 80, right: 70, bottom: 40, left: 90};
+const margin = {top: 80, right: 70, bottom: 80, left: 90};
 const width = 1200 - margin.left - margin.right,
       height = 700 - margin.top - margin.bottom;
 
@@ -84,11 +84,11 @@ function ready(error, movies){
 // Making the scatterplot
   let logscale = 10000000;
   let tooltipLeft = (d) => 200 + margin.left + d.AYear;
-  let tooltipTop = (d) => -30 + margin.top + height - (height * d.PerFRevenue/maxY);
-  let spaceTop = 25;
+  let tooltipTop = (d) => 50 + margin.top + height - (height * d.PerFRevenue/maxY);
+  let spaceTop = 28;
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
-  let tooltipTop4 = (d) => spaceTop + tooltipTop3(d);
+  let tooltipTop4 = (d) => -5 + spaceTop + tooltipTop3(d);
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
@@ -133,26 +133,27 @@ function ready(error, movies){
       .style("padding", "5px")
       .style("font-weight", "700")
       .style("font-size", "20px")
-      .style("background", "red");
+      .style("text-decoration", "underline")
+      .style("background", "white");
     tooltip2.text(`Foreign BO: $${tooltip2Data(d.ForBO)}`)
       .style("min-weight", "200px")
       .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
       .style('top', `${tooltipTop2(d) + 3}px`)
-      .style("background", "red");
+      .style("background", "white");
     tooltip3.text(`Total BO: $${tooltip2Data(d.WWBO)}`)
       .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
       .style('top', `${tooltipTop3(d)}px`)
-      .style("background", "red");
-    tooltip4.text(`% Foreign : `)
+      .style("background", "white");
+    tooltip4.text(`Percent from Foreign: `)
       .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
       .style('top', `${tooltipTop4(d)}px`)
-      .style("background", "red")
+      .style("background", "white")
       .append("text")
       .text(`${round(d.PerFRevenue,2)}%`)
       .style("font-weight", "700")
@@ -186,10 +187,12 @@ function ready(error, movies){
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x))
       .append("text")
-      .attr("fill", "#666")
+      .attr("fill", "black")
       .attr("text-anchor", "start")
       .attr("x", "1em")
-      .attr("y", "4em")
+      .attr("y", "2.5em")
+      .style("font-size", "18px")
+      .style("font-family", "Roboto")
       .text("Year Released");
 
   // Add the Y Axis
