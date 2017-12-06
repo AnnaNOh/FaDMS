@@ -1,0 +1,56 @@
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-top: 50px;
+  margin-left: 30px;
+}
+
+
+.xAxis {
+  /*fill: #666;*/
+  stroke: #666;
+}
+
+.axisLeft {
+  width: 40px;
+}
+.axisLeft path,
+.axisLeft line {
+  fill: none;
+  stroke: none;
+}
+.axisLeft .tick line {
+  stroke: black;
+}
+.axisLeft > text {
+  word-wrap: break-word;
+  width: 40px;
+  font-size: 15px;
+}
+/*.yAxisLeft1 {
+  position: absolute;
+  top: 10px;
+  left: -10px;
+}
+.yAxisText2 {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}*/
+
+/*.tick {
+  width: 100px;
+  border-top: 1px solid black;
+}*/
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 28px;
+  pointer-events: none;
+}

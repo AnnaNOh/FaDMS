@@ -9530,7 +9530,7 @@ function ready(error, movies){
   .data(movies)
   .enter()
   .append("circle")
-  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 5); })
+  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 4); })
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
   .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#225FC1')
@@ -9586,10 +9586,11 @@ function ready(error, movies){
 
   // Add the X Axis
   svg.append("g")
+      .attr("class", "xAxis")
       .attr("transform", "translate(0," + height + ")")
       .call(__WEBPACK_IMPORTED_MODULE_0_d3__["a" /* axisBottom */](x))
       .append("text")
-      .attr("fill", "#000")
+      .attr("fill", "#666")
       .attr("text-anchor", "start")
       .attr("x", "1em")
       .attr("y", "4em")
@@ -9598,12 +9599,37 @@ function ready(error, movies){
   // Add the Y Axis
   svg.append("g")
       .attr("class", "axisLeft")
-      .call(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* axisLeft */](y).ticks(10, "s"))
+      .call(__WEBPACK_IMPORTED_MODULE_0_d3__["b" /* axisLeft */](y).ticks(10, "s"));
+
+  // Spacing out the Y Axis Label
+  let xAxisTopText = -55;
+  let yAxisTopText1 = -45;
+  let yAxisTopText2 = yAxisTopText1 + 15;
+  let yAxisTopText3 = yAxisTopText2 + 15;
+  svg.append("g")
+      .attr("class", "text1")
       .append("text")
-      .text("Percent of Gross Box Office from Foreign Markets")
-      .attr("fill", "#000")
-      .attr("x", "12em")
-      .attr("y", "-1.5em");
+      .text("Percent of")
+      .attr("class", "yAxisText1")
+      .attr("x", `${xAxisTopText}`)
+      .attr("y", `${yAxisTopText1}px`)
+      .attr("stroke");
+  svg.append("g")
+      .attr("class", "text2")
+      .append("text")
+      .text("Gross Box Office")
+      .attr("class", "yAxisText2")
+      .attr("x", `${xAxisTopText}`)
+      .attr("y", `${yAxisTopText2}px`)
+      .attr("stroke");
+  svg.append("g")
+      .attr("class", "text3")
+      .append("text")
+      .text("from Foreign Markets")
+      .attr("class", "yAxisText3")
+      .attr("x", `${xAxisTopText}`)
+      .attr("y", `${yAxisTopText3}px`);
+
 
 }
 
