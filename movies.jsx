@@ -44,6 +44,7 @@ var y = d3.scaleLinear().rangeRound([0, height]);
 let AllMovieInfo = [];
 d3.queue()
   .defer(d3.csv, "data/imdb250.csv")
+  .defer(d3.csv, "data/boxoffice.csv")
   .await(ready);
 
 // once data is fetched, then do stuff
@@ -72,8 +73,6 @@ function ready(error, movies){
     d.AYear = (d.Year - oldestYear) / (60/width);
     d.AWWBO = d.WWBO / (biggestWWBO/height);
 
-    MovieItem[d.Movie] = d;
-    AllMovieInfo.push(MovieItem);
   });
 
   // Scale the data's range
@@ -89,6 +88,8 @@ function ready(error, movies){
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
   let tooltipTop4 = (d) => -5 + spaceTop + tooltipTop3(d);
+  let color1 = d3.scaleLinear().domain([1960, 2017]).range(["red", "blue"]);
+
   console.log(AllMovieInfo);
   svg.selectAll("circle")
   .data(movies)
@@ -97,7 +98,7 @@ function ready(error, movies){
   .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 4); })
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
-  .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#225FC1')
+  .style('fill', (d) => color1(d.Year))
   // '#C13522'
   .style("fill-opacity", 0.5)
   .on('mouseover', (d) => {
