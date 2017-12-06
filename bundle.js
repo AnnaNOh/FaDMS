@@ -9486,7 +9486,12 @@ __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
   .await(ready);
 
 // once data is fetched, then do stuff
-function ready(error, movies){
+function ready(error, imdb, giants){
+//  d3.select("input[type=radio]").
+
+
+
+  let movies = imdb;
   if (error) throw error;
 
   let oldestYear = 1960;
