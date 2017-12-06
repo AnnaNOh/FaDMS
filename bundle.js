@@ -9439,11 +9439,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
 
-
-const margin = {top: 100, right: 50, bottom: 50, left: 140};
+const margin = {top: 80, right: 70, bottom: 40, left: 90};
 const width = 1200 - margin.left - margin.right,
-      height = 620 - margin.top - margin.bottom;
+      height = 700 - margin.top - margin.bottom;
 
 const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
               .append("svg")
@@ -9519,9 +9521,9 @@ function ready(error, movies){
 
 // Making the scatterplot
   let logscale = 10000000;
-  let tooltipLeft = (d) => margin.left + d.AYear;
-  let tooltipTop = (d) => margin.top + height - (height * d.PerFRevenue/maxY);
-  let spaceTop = 15;
+  let tooltipLeft = (d) => 200 + margin.left + d.AYear;
+  let tooltipTop = (d) => -30 + margin.top + height - (height * d.PerFRevenue/maxY);
+  let spaceTop = 25;
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
   let tooltipTop4 = (d) => spaceTop + tooltipTop3(d);
@@ -9539,45 +9541,77 @@ function ready(error, movies){
   .on('mouseover', (d) => {
     tooltip.transition()
       .duration(100)
+      .style("z-index", 5)
       .style('opacity', .9);
     tooltip2.transition()
       .duration(100)
+      .style("z-index", 5)
       .style('opacity', .9);
     tooltip3.transition()
       .duration(100)
+      .style("z-index", 5)
       .style('opacity', .9);
     tooltip4.transition()
       .duration(100)
+      .style("z-index", 5)
       .style('opacity', .9);
 
+
+    let tooltip2Data = function(e) {
+      if (e > 1000000000 ) return `${round(e/1000000000, 2)} B`;
+      else if (e > 1000000) return `${round(e/1000000, 2)} mil`;
+      else return `${round(e/1000, 2)} Thousand`;
+    };
     tooltip.text(`${d.Movie} (${d.Year})`)
+      .style("width", "100")
+      // .style("text-overflow", "ellipsis")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
-      .style('top', `${tooltipTop(d)}px`);
-    tooltip2.text(`Foreign Box Office: $${d.ForBO}`)
+      .style('top', `${tooltipTop(d)}px`)
+      .style("padding", "5px")
+      .style("font-weight", "700")
+      .style("font-size", "20px")
+      .style("background", "red");
+    tooltip2.text(`Foreign BO: $${tooltip2Data(d.ForBO)}`)
+      .style("min-weight", "200px")
+      .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
-      .style('top', `${tooltipTop2(d)}px`);
-    tooltip3.text(`Total Box Office: $${d.WWBO}`)
+      .style('top', `${tooltipTop2(d) + 3}px`)
+      .style("background", "red");
+    tooltip3.text(`Total BO: $${tooltip2Data(d.WWBO)}`)
+      .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
-      .style('top', `${tooltipTop3(d)}px`);
-    tooltip4.text(`Percent Foreign Revenue: ${d.PerFRevenue}%`)
+      .style('top', `${tooltipTop3(d)}px`)
+      .style("background", "red");
+    tooltip4.text(`% Foreign : `)
+      .style("padding", "5px")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
-      .style('top', `${tooltipTop4(d)}px`);
+      .style('top', `${tooltipTop4(d)}px`)
+      .style("background", "red")
+      .append("text")
+      .text(`${round(d.PerFRevenue,2)}%`)
+      .style("font-weight", "700")
+      .style("font-size", "20px");
+
   })
   .on('mouseout', () => {
     tooltip.transition()
     .duration(400)
+    .style("z-index", -2)
     .style('opacity', 0);
     tooltip2.transition()
+    .style("z-index", -2)
     .duration(400)
     .style('opacity', 0);
     tooltip3.transition()
+    .style("z-index", -2)
     .duration(400)
     .style('opacity', 0);
     tooltip4.transition()
+    .style("z-index", -2)
     .duration(400)
     .style('opacity', 0);
   });
@@ -9609,7 +9643,7 @@ function ready(error, movies){
   svg.append("g")
       .attr("class", "text1")
       .append("text")
-      .text("Percent of")
+      .text("%")
       .attr("class", "yAxisText1")
       .attr("x", `${xAxisTopText}`)
       .attr("y", `${yAxisTopText1}px`)
