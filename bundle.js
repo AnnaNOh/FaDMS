@@ -9530,7 +9530,7 @@ function ready(error, movies){
   .data(movies)
   .enter()
   .append("circle")
-  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 20); })
+  .attr("r", function(d) { return(Math.log(d.WWBO/logscale) * 5); })
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
   .style('fill', (d) => d.PerFRevenue > 20 ? '#225FC1' : '#225FC1')
