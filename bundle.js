@@ -9487,7 +9487,9 @@ __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
 
 // once data is fetched, then do stuff
 function ready(error, imdb, giants){
-//  d3.select("input[type=radio]").
+  __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("input[type=radio]").on("change", function(){
+    // console.log();
+  });
 
 
 

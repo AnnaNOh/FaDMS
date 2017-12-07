@@ -49,7 +49,9 @@ d3.queue()
 
 // once data is fetched, then do stuff
 function ready(error, imdb, giants){
-//  d3.select("input[type=radio]").
+  d3.select("input[type=radio]").on("change", function(){
+    // console.log();
+  });
 
 
 

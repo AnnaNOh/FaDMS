@@ -58,3 +58,10 @@ body {
   font-size: 30px;
   font-weight: 400;
 }
+
+.form-data-selector {
+  /*margin-left: 2.5em;*/
+}
+.form-data-selector > input {
+  margin-left: 4em;
+}
