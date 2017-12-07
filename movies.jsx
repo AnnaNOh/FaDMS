@@ -14,7 +14,7 @@ const svg = d3.select("body")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
-                .attr("transform",
+              .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
 const tooltipAll = d3.select("body")
@@ -54,7 +54,6 @@ function ready(error, imdb, giants, oscars){
   if (error) throw error;
 
   let oldestYear = 1960;
-  let biggestWWBO = 1500000000;
   movies.forEach(function(d){
 
     d.Year = Number(d.Year);
@@ -72,14 +71,13 @@ function ready(error, imdb, giants, oscars){
     d.PerFRoI = d.FRoI / (d.RoI) * 100;
 
     d.AYear = (d.Year - oldestYear) / (60/width);
-    d.AWWBO = d.WWBO / (biggestWWBO/height);
-
   });
 
   // Scale the data's range
-  let maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
+  let maxY = 80;
+  // let maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
   x.domain([1962, 2017]);
-  y.domain([maxY, 0]);
+  y.domain([80, 0]);
 
 // Making the scatterplot
   let logscale = 10000000;
@@ -89,9 +87,11 @@ function ready(error, imdb, giants, oscars){
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
   let tooltipTop4 = (d) => -5 + spaceTop + tooltipTop3(d);
+
+  // color function
   let color1 = d3.scaleLinear().domain([1960, 2017]).range(["red", "blue"]);
 
-  console.log(AllMovieInfo);
+
   svg.selectAll("circle")
   .data(movies)
   .enter()
@@ -100,7 +100,6 @@ function ready(error, imdb, giants, oscars){
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
   .style('fill', (d) => color1(d.Year))
-  // '#C13522'
   .style("fill-opacity", 0.5)
   .on('mouseover', (d) => {
     tooltip.transition()
@@ -234,6 +233,7 @@ function ready(error, imdb, giants, oscars){
 
 
   d3.selectAll("input").on("change", function(){
+    movies = {};
     let result = d3.select("input[type=radio]:checked").node().value;
     console.log(result);
     if (result === "oscars") {movies = oscars;}
@@ -243,9 +243,6 @@ function ready(error, imdb, giants, oscars){
 
 
 
-
-    oldestYear = 1960;
-    biggestWWBO = 1500000000;
     movies.forEach(function(d){
       d.Year = Number(d.Year);
       d.Budget = Number(d.Budget);
@@ -261,41 +258,44 @@ function ready(error, imdb, giants, oscars){
       d.FRoI = (d.ForBO - d.Budget) / (d.Budget);
       d.PerFRoI = d.FRoI / (d.RoI) * 100;
 
-      d.AYear = (d.Year - oldestYear) / (60/width);
-      d.AWWBO = d.WWBO / (biggestWWBO/height);
-      console.log(d);
+      d.AYear = (d.Year - oldestYear) / ((2017 - oldestYear)/width);
+
 
       if (d.Movie === ""){
-        d.Year = 1950;
+        d.Year = 2030;
         d.WWBO = logscale;
         d.DomBO = 0;
         d.ForBO = 0;
         d.PerFRevenue = 0;
         d.AYear = -5;
-        d.AWWBO = 0;
       }
   });
 
-  // Scale the data's range
-  maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
-  x.domain([1962, 2017]);
-  y.domain([maxY, 0]);
+
+  let minX = d3.min(movies, function(d) { return d.Year; });
+  console.log(minX);
+  color1 = d3.scaleLinear().domain([minX, 2017]).range(["red", "blue"]);
 
   svg.selectAll("circle")
       .data(movies)
       .transition()
       .duration(1000)
-      .attr("fill", "red")
-      .attr("r", 5)
       .delay(function(d, i){return i / movies.length * 500;})
       .attr("r", function(d) {
         return(Math.log(d.WWBO/logscale) * 4); })
       .attr("cx", function(d) {
         return d.AYear; })
       .attr("cy", function(d) {
-        console.log(maxY);
+
         return height - (d.PerFRevenue/maxY * height); })
       .style('fill', (d) => color1(d.Year));
+
+    // set the ranges
+    // x = d3.scaleLinear().domain([minX, 2017]).range([0, width]).ticks();
+    // y = d3.scaleLinear().domain([maxY, 0]).rangeRound([0, height]).ticks();
+    //
+    // svg.select("#xAxis").transition().duration(1000).call(d3.axisBottom(x));
+    // svg.select("#axisLeft").transition().duration(1000).call(d3.axisLeft(y));
   });
 
 

@@ -294,15 +294,15 @@ function newInterval(floori, offseti, count, field) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__src_threshold_sturges__ = __webpack_require__(99);
 /* unused harmony reexport thresholdSturges */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__src_max__ = __webpack_require__(181);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_11__src_max__["a"]; });
+/* unused harmony reexport max */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__src_mean__ = __webpack_require__(182);
 /* unused harmony reexport mean */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__src_median__ = __webpack_require__(183);
 /* unused harmony reexport median */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__src_merge__ = __webpack_require__(184);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_14__src_merge__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_14__src_merge__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__src_min__ = __webpack_require__(100);
-/* unused harmony reexport min */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_15__src_min__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__src_pairs__ = __webpack_require__(92);
 /* unused harmony reexport pairs */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__src_permute__ = __webpack_require__(185);
@@ -2042,7 +2042,7 @@ function clipRectangle(x0, y0, x1, y1) {
     function polygonEnd() {
       var startInside = polygonInside(),
           cleanInside = clean && startInside,
-          visible = (segments = Object(__WEBPACK_IMPORTED_MODULE_4_d3_array__["e" /* merge */])(segments)).length;
+          visible = (segments = Object(__WEBPACK_IMPORTED_MODULE_4_d3_array__["d" /* merge */])(segments)).length;
       if (cleanInside || visible) {
         stream.polygonStart();
         if (cleanInside) {
@@ -6683,7 +6683,7 @@ function clipAntimeridianInterpolate(from, to, direction, stream) {
         clip.point = point;
         clip.lineStart = lineStart;
         clip.lineEnd = lineEnd;
-        segments = Object(__WEBPACK_IMPORTED_MODULE_4_d3_array__["e" /* merge */])(segments);
+        segments = Object(__WEBPACK_IMPORTED_MODULE_4_d3_array__["d" /* merge */])(segments);
         var startInside = Object(__WEBPACK_IMPORTED_MODULE_3__polygonContains__["a" /* default */])(polygon, start);
         if (segments.length) {
           if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
@@ -9452,7 +9452,7 @@ const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
-                .attr("transform",
+              .attr("transform",
                       "translate(" + margin.left + "," + margin.top + ")");
 
 const tooltipAll = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
@@ -9492,7 +9492,6 @@ function ready(error, imdb, giants, oscars){
   if (error) throw error;
 
   let oldestYear = 1960;
-  let biggestWWBO = 1500000000;
   movies.forEach(function(d){
 
     d.Year = Number(d.Year);
@@ -9510,14 +9509,13 @@ function ready(error, imdb, giants, oscars){
     d.PerFRoI = d.FRoI / (d.RoI) * 100;
 
     d.AYear = (d.Year - oldestYear) / (60/width);
-    d.AWWBO = d.WWBO / (biggestWWBO/height);
-
   });
 
   // Scale the data's range
-  let maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* max */](movies, function(d) { return d.PerFRevenue; });
+  let maxY = 80;
+  // let maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
   x.domain([1962, 2017]);
-  y.domain([maxY, 0]);
+  y.domain([80, 0]);
 
 // Making the scatterplot
   let logscale = 10000000;
@@ -9527,9 +9525,11 @@ function ready(error, imdb, giants, oscars){
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
   let tooltipTop3 = (d) => spaceTop + tooltipTop2(d);
   let tooltipTop4 = (d) => -5 + spaceTop + tooltipTop3(d);
+
+  // color function
   let color1 = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().domain([1960, 2017]).range(["red", "blue"]);
 
-  console.log(AllMovieInfo);
+
   svg.selectAll("circle")
   .data(movies)
   .enter()
@@ -9538,7 +9538,6 @@ function ready(error, imdb, giants, oscars){
   .attr("cx", function(d) { return (d.AYear); })
   .attr("cy", function(d) { return height - (d.PerFRevenue/maxY * height); })
   .style('fill', (d) => color1(d.Year))
-  // '#C13522'
   .style("fill-opacity", 0.5)
   .on('mouseover', (d) => {
     tooltip.transition()
@@ -9672,6 +9671,7 @@ function ready(error, imdb, giants, oscars){
 
 
   __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* selectAll */]("input").on("change", function(){
+    movies = {};
     let result = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("input[type=radio]:checked").node().value;
     console.log(result);
     if (result === "oscars") {movies = oscars;}
@@ -9681,9 +9681,6 @@ function ready(error, imdb, giants, oscars){
 
 
 
-
-    oldestYear = 1960;
-    biggestWWBO = 1500000000;
     movies.forEach(function(d){
       d.Year = Number(d.Year);
       d.Budget = Number(d.Budget);
@@ -9699,41 +9696,44 @@ function ready(error, imdb, giants, oscars){
       d.FRoI = (d.ForBO - d.Budget) / (d.Budget);
       d.PerFRoI = d.FRoI / (d.RoI) * 100;
 
-      d.AYear = (d.Year - oldestYear) / (60/width);
-      d.AWWBO = d.WWBO / (biggestWWBO/height);
-      console.log(d);
+      d.AYear = (d.Year - oldestYear) / ((2017 - oldestYear)/width);
+
 
       if (d.Movie === ""){
-        d.Year = 1950;
+        d.Year = 2030;
         d.WWBO = logscale;
         d.DomBO = 0;
         d.ForBO = 0;
         d.PerFRevenue = 0;
         d.AYear = -5;
-        d.AWWBO = 0;
       }
   });
 
-  // Scale the data's range
-  maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* max */](movies, function(d) { return d.PerFRevenue; });
-  x.domain([1962, 2017]);
-  y.domain([maxY, 0]);
+
+  let minX = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* min */](movies, function(d) { return d.Year; });
+  console.log(minX);
+  color1 = __WEBPACK_IMPORTED_MODULE_0_d3__["f" /* scaleLinear */]().domain([minX, 2017]).range(["red", "blue"]);
 
   svg.selectAll("circle")
       .data(movies)
       .transition()
       .duration(1000)
-      .attr("fill", "red")
-      .attr("r", 5)
       .delay(function(d, i){return i / movies.length * 500;})
       .attr("r", function(d) {
         return(Math.log(d.WWBO/logscale) * 4); })
       .attr("cx", function(d) {
         return d.AYear; })
       .attr("cy", function(d) {
-        console.log(maxY);
+
         return height - (d.PerFRevenue/maxY * height); })
       .style('fill', (d) => color1(d.Year));
+
+    // set the ranges
+    // x = d3.scaleLinear().domain([minX, 2017]).range([0, width]).ticks();
+    // y = d3.scaleLinear().domain([maxY, 0]).rangeRound([0, height]).ticks();
+    //
+    // svg.select("#xAxis").transition().duration(1000).call(d3.axisBottom(x));
+    // svg.select("#axisLeft").transition().duration(1000).call(d3.axisLeft(y));
   });
 
 
@@ -9751,7 +9751,7 @@ function ready(error, imdb, giants, oscars){
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__build_package__ = __webpack_require__(173);
 /* unused harmony reexport version */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_d3_array__ = __webpack_require__(3);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["d"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_1_d3_array__["e"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_axis__ = __webpack_require__(190);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["a"]; });
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_2_d3_axis__["b"]; });
@@ -10071,7 +10071,7 @@ var dependencies = {"d3-array":"1.2.1","d3-axis":"1.0.8","d3-brush":"1.0.4","d3-
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function(values, valueof) {
+/* unused harmony default export */ var _unused_webpack_default_export = (function(values, valueof) {
   var n = values.length,
       i = -1,
       value,
