@@ -273,7 +273,7 @@ function ready(error, imdb, giants, oscars){
 
 
   let minX = d3.min(movies, function(d) { return d.Year; });
-  console.log(minX);
+  if (minX < 1960){ minX = 1960;}
   color1 = d3.scaleLinear().domain([minX, 2017]).range(["red", "blue"]);
 
   svg.selectAll("circle")
