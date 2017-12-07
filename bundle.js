@@ -151,17 +151,17 @@ function haversin(x) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__src_select__ = __webpack_require__(200);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_7__src_select__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__src_selectAll__ = __webpack_require__(228);
-/* unused harmony reexport selectAll */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_8__src_selectAll__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__src_selection_index__ = __webpack_require__(4);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_9__src_selection_index__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_9__src_selection_index__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__src_selector__ = __webpack_require__(56);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_10__src_selector__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_10__src_selector__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__src_selectorAll__ = __webpack_require__(103);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_11__src_selectorAll__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_11__src_selectorAll__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__src_selection_style__ = __webpack_require__(106);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return __WEBPACK_IMPORTED_MODULE_12__src_selection_style__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_12__src_selection_style__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__src_touch__ = __webpack_require__(229);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return __WEBPACK_IMPORTED_MODULE_13__src_touch__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return __WEBPACK_IMPORTED_MODULE_13__src_touch__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__src_touches__ = __webpack_require__(230);
 /* unused harmony reexport touches */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__src_window__ = __webpack_require__(57);
@@ -948,14 +948,14 @@ function Transition(groups, parents, name, id) {
 }
 
 function transition(name) {
-  return Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["g" /* selection */])().transition(name);
+  return Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selection */])().transition(name);
 }
 
 function newId() {
   return ++id;
 }
 
-var selection_prototype = __WEBPACK_IMPORTED_MODULE_0_d3_selection__["g" /* selection */].prototype;
+var selection_prototype = __WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selection */].prototype;
 
 Transition.prototype = transition.prototype = {
   constructor: Transition,
@@ -9486,20 +9486,14 @@ __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
   .await(ready);
 
 // once data is fetched, then do stuff
-function ready(error, imdb, giants){
-  __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("input[type=radio]").on("change", function(){
-    // console.log();
-  });
-
-
-
+function ready(error, imdb, giants, oscars){
   let movies = imdb;
+
   if (error) throw error;
 
   let oldestYear = 1960;
   let biggestWWBO = 1500000000;
   movies.forEach(function(d){
-    let MovieItem = {};
 
     d.Year = Number(d.Year);
     d.Budget = Number(d.Budget);
@@ -9676,6 +9670,76 @@ function ready(error, imdb, giants){
       .attr("y", `${yAxisTopText3}px`);
 
 
+
+  __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* selectAll */]("input").on("change", function(){
+    let result = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("input[type=radio]:checked").node().value;
+    console.log(result);
+    if (result === "oscars") {movies = oscars;}
+    else if (result === "giants") {movies = giants;}
+    else {movies = imdb;}
+    console.log(movies);
+
+
+
+
+    oldestYear = 1960;
+    biggestWWBO = 1500000000;
+    movies.forEach(function(d){
+      d.Year = Number(d.Year);
+      d.Budget = Number(d.Budget);
+      d.WWBO = Number(d.WWBO);
+      d.DomBO = Number(d.DomBO);
+      d.ForBO = Number(d.ForBO);
+
+      // Profit and RoI
+      d.WWProfit = (d.WWBO - d.Budget);
+      d.ForProfit = (d.ForBO - d.Budget);
+      d.PerFRevenue = (d.ForBO / d.WWBO) * 100;
+      d.RoI = (d.WWProfit) / (d.Budget);
+      d.FRoI = (d.ForBO - d.Budget) / (d.Budget);
+      d.PerFRoI = d.FRoI / (d.RoI) * 100;
+
+      d.AYear = (d.Year - oldestYear) / (60/width);
+      d.AWWBO = d.WWBO / (biggestWWBO/height);
+      console.log(d);
+
+      if (d.Movie === ""){
+        d.Year = 1950;
+        d.WWBO = logscale;
+        d.DomBO = 0;
+        d.ForBO = 0;
+        d.PerFRevenue = 0;
+        d.AYear = -5;
+        d.AWWBO = 0;
+      }
+  });
+
+  // Scale the data's range
+  maxY = __WEBPACK_IMPORTED_MODULE_0_d3__["d" /* max */](movies, function(d) { return d.PerFRevenue; });
+  x.domain([1962, 2017]);
+  y.domain([maxY, 0]);
+
+  svg.selectAll("circle")
+      .data(movies)
+      .transition()
+      .duration(1000)
+      .attr("fill", "red")
+      .attr("r", 5)
+      .delay(function(d, i){return i / movies.length * 500;})
+      .attr("r", function(d) {
+        return(Math.log(d.WWBO/logscale) * 4); })
+      .attr("cx", function(d) {
+        return d.AYear; })
+      .attr("cy", function(d) {
+        console.log(maxY);
+        return height - (d.PerFRevenue/maxY * height); })
+      .style('fill', (d) => color1(d.Year));
+  });
+
+
+
+
+
 }
 
 
@@ -9733,6 +9797,7 @@ function ready(error, imdb, giants){
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_22_d3_scale__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23_d3_selection__ = __webpack_require__(1);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_23_d3_selection__["g"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24_d3_shape__ = __webpack_require__(428);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_d3_time__ = __webpack_require__(44);
@@ -11218,7 +11283,7 @@ function defaultTouchable() {
         n = touches.length, i, gesture;
 
     for (i = 0; i < n; ++i) {
-      if (gesture = beforestart(touches[i].identifier, c, __WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* touch */], this, arguments)) {
+      if (gesture = beforestart(touches[i].identifier, c, __WEBPACK_IMPORTED_MODULE_1_d3_selection__["l" /* touch */], this, arguments)) {
         Object(__WEBPACK_IMPORTED_MODULE_3__noevent__["b" /* nopropagation */])();
         gesture("start");
       }
@@ -12151,7 +12216,7 @@ function dispatchFunction(type, params) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__selection_index__ = __webpack_require__(4);
 
 
-/* unused harmony default export */ var _unused_webpack_default_export = (function(selector) {
+/* harmony default export */ __webpack_exports__["a"] = (function(selector) {
   return typeof selector === "string"
       ? new __WEBPACK_IMPORTED_MODULE_0__selection_index__["a" /* Selection */]([document.querySelectorAll(selector)], [document.documentElement])
       : new __WEBPACK_IMPORTED_MODULE_0__selection_index__["a" /* Selection */]([selector == null ? [] : selector], __WEBPACK_IMPORTED_MODULE_0__selection_index__["c" /* root */]);
@@ -12811,8 +12876,8 @@ var cubehelixLong = cubehelix(__WEBPACK_IMPORTED_MODULE_1__color__["a" /* defaul
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_d3_selection__["g" /* selection */].prototype.interrupt = __WEBPACK_IMPORTED_MODULE_1__interrupt__["a" /* default */];
-__WEBPACK_IMPORTED_MODULE_0_d3_selection__["g" /* selection */].prototype.transition = __WEBPACK_IMPORTED_MODULE_2__transition__["a" /* default */];
+__WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selection */].prototype.interrupt = __WEBPACK_IMPORTED_MODULE_1__interrupt__["a" /* default */];
+__WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selection */].prototype.transition = __WEBPACK_IMPORTED_MODULE_2__transition__["a" /* default */];
 
 
 /***/ }),
@@ -13260,7 +13325,7 @@ function removeFunction(id) {
   var name = this._name,
       id = this._id;
 
-  if (typeof select !== "function") select = Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selector */])(select);
+  if (typeof select !== "function") select = Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["i" /* selector */])(select);
 
   for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) {
@@ -13292,7 +13357,7 @@ function removeFunction(id) {
   var name = this._name,
       id = this._id;
 
-  if (typeof select !== "function") select = Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["i" /* selectorAll */])(select);
+  if (typeof select !== "function") select = Object(__WEBPACK_IMPORTED_MODULE_0_d3_selection__["j" /* selectorAll */])(select);
 
   for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
@@ -13320,7 +13385,7 @@ function removeFunction(id) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3_selection__ = __webpack_require__(1);
 
 
-var Selection = __WEBPACK_IMPORTED_MODULE_0_d3_selection__["g" /* selection */].prototype.constructor;
+var Selection = __WEBPACK_IMPORTED_MODULE_0_d3_selection__["h" /* selection */].prototype.constructor;
 
 /* harmony default export */ __webpack_exports__["a"] = (function() {
   return new Selection(this._groups, this._parents);
@@ -13346,8 +13411,8 @@ function styleRemove(name, interpolate) {
       value10,
       interpolate0;
   return function() {
-    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["j" /* style */])(this, name),
-        value1 = (this.style.removeProperty(name), Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["j" /* style */])(this, name));
+    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* style */])(this, name),
+        value1 = (this.style.removeProperty(name), Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* style */])(this, name));
     return value0 === value1 ? null
         : value0 === value00 && value1 === value10 ? interpolate0
         : interpolate0 = interpolate(value00 = value0, value10 = value1);
@@ -13364,7 +13429,7 @@ function styleConstant(name, interpolate, value1) {
   var value00,
       interpolate0;
   return function() {
-    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["j" /* style */])(this, name);
+    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* style */])(this, name);
     return value0 === value1 ? null
         : value0 === value00 ? interpolate0
         : interpolate0 = interpolate(value00 = value0, value1);
@@ -13376,9 +13441,9 @@ function styleFunction(name, interpolate, value) {
       value10,
       interpolate0;
   return function() {
-    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["j" /* style */])(this, name),
+    var value0 = Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* style */])(this, name),
         value1 = value(this);
-    if (value1 == null) value1 = (this.style.removeProperty(name), Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["j" /* style */])(this, name));
+    if (value1 == null) value1 = (this.style.removeProperty(name), Object(__WEBPACK_IMPORTED_MODULE_1_d3_selection__["k" /* style */])(this, name));
     return value0 === value1 ? null
         : value0 === value00 && value1 === value10 ? interpolate0
         : interpolate0 = interpolate(value00 = value0, value10 = value1);
@@ -22693,7 +22758,7 @@ function defaultConstrain(transform, extent, translateExtent) {
 
     Object(__WEBPACK_IMPORTED_MODULE_8__noevent__["b" /* nopropagation */])();
     for (i = 0; i < n; ++i) {
-      t = touches[i], p = Object(__WEBPACK_IMPORTED_MODULE_3_d3_selection__["k" /* touch */])(this, touches, t.identifier);
+      t = touches[i], p = Object(__WEBPACK_IMPORTED_MODULE_3_d3_selection__["l" /* touch */])(this, touches, t.identifier);
       p = [p, this.__zoom.invert(p), t.identifier];
       if (!g.touch0) g.touch0 = p, started = true;
       else if (!g.touch1) g.touch1 = p;
@@ -22725,7 +22790,7 @@ function defaultConstrain(transform, extent, translateExtent) {
     Object(__WEBPACK_IMPORTED_MODULE_8__noevent__["a" /* default */])();
     if (touchstarting) touchstarting = clearTimeout(touchstarting);
     for (i = 0; i < n; ++i) {
-      t = touches[i], p = Object(__WEBPACK_IMPORTED_MODULE_3_d3_selection__["k" /* touch */])(this, touches, t.identifier);
+      t = touches[i], p = Object(__WEBPACK_IMPORTED_MODULE_3_d3_selection__["l" /* touch */])(this, touches, t.identifier);
       if (g.touch0 && g.touch0[2] === t.identifier) g.touch0[0] = p;
       else if (g.touch1 && g.touch1[2] === t.identifier) g.touch1[0] = p;
     }

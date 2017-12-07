@@ -48,20 +48,14 @@ d3.queue()
   .await(ready);
 
 // once data is fetched, then do stuff
-function ready(error, imdb, giants){
-  d3.select("input[type=radio]").on("change", function(){
-    // console.log();
-  });
-
-
-
+function ready(error, imdb, giants, oscars){
   let movies = imdb;
+
   if (error) throw error;
 
   let oldestYear = 1960;
   let biggestWWBO = 1500000000;
   movies.forEach(function(d){
-    let MovieItem = {};
 
     d.Year = Number(d.Year);
     d.Budget = Number(d.Budget);
@@ -236,6 +230,76 @@ function ready(error, imdb, giants){
       .attr("class", "yAxisText3")
       .attr("x", `${xAxisTopText}`)
       .attr("y", `${yAxisTopText3}px`);
+
+
+
+  d3.selectAll("input").on("change", function(){
+    let result = d3.select("input[type=radio]:checked").node().value;
+    console.log(result);
+    if (result === "oscars") {movies = oscars;}
+    else if (result === "giants") {movies = giants;}
+    else {movies = imdb;}
+    console.log(movies);
+
+
+
+
+    oldestYear = 1960;
+    biggestWWBO = 1500000000;
+    movies.forEach(function(d){
+      d.Year = Number(d.Year);
+      d.Budget = Number(d.Budget);
+      d.WWBO = Number(d.WWBO);
+      d.DomBO = Number(d.DomBO);
+      d.ForBO = Number(d.ForBO);
+
+      // Profit and RoI
+      d.WWProfit = (d.WWBO - d.Budget);
+      d.ForProfit = (d.ForBO - d.Budget);
+      d.PerFRevenue = (d.ForBO / d.WWBO) * 100;
+      d.RoI = (d.WWProfit) / (d.Budget);
+      d.FRoI = (d.ForBO - d.Budget) / (d.Budget);
+      d.PerFRoI = d.FRoI / (d.RoI) * 100;
+
+      d.AYear = (d.Year - oldestYear) / (60/width);
+      d.AWWBO = d.WWBO / (biggestWWBO/height);
+      console.log(d);
+
+      if (d.Movie === ""){
+        d.Year = 1950;
+        d.WWBO = logscale;
+        d.DomBO = 0;
+        d.ForBO = 0;
+        d.PerFRevenue = 0;
+        d.AYear = -5;
+        d.AWWBO = 0;
+      }
+  });
+
+  // Scale the data's range
+  maxY = d3.max(movies, function(d) { return d.PerFRevenue; });
+  x.domain([1962, 2017]);
+  y.domain([maxY, 0]);
+
+  svg.selectAll("circle")
+      .data(movies)
+      .transition()
+      .duration(1000)
+      .attr("fill", "red")
+      .attr("r", 5)
+      .delay(function(d, i){return i / movies.length * 500;})
+      .attr("r", function(d) {
+        return(Math.log(d.WWBO/logscale) * 4); })
+      .attr("cx", function(d) {
+        return d.AYear; })
+      .attr("cy", function(d) {
+        console.log(maxY);
+        return height - (d.PerFRevenue/maxY * height); })
+      .style('fill', (d) => color1(d.Year));
+  });
+
+
+
 
 
 }
