@@ -236,11 +236,9 @@ function ready(error, imdb, giants, oscars){
   d3.selectAll("input").on("change", function(){
     movies = {};
     let result = d3.select("input[type=radio]:checked").node().value;
-    console.log(result);
     if (result === "oscars") {movies = oscars;}
     else if (result === "giants") {movies = giants;}
     else {movies = imdb;}
-    console.log(movies);
 
     movies.forEach(function(d){
       d.Year = Number(d.Year);

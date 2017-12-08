@@ -9674,11 +9674,9 @@ function ready(error, imdb, giants, oscars){
   __WEBPACK_IMPORTED_MODULE_0_d3__["h" /* selectAll */]("input").on("change", function(){
     movies = {};
     let result = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("input[type=radio]:checked").node().value;
-    console.log(result);
     if (result === "oscars") {movies = oscars;}
     else if (result === "giants") {movies = giants;}
     else {movies = imdb;}
-    console.log(movies);
 
     movies.forEach(function(d){
       d.Year = Number(d.Year);
