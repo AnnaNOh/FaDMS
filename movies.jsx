@@ -9,7 +9,9 @@ const margin = {top: 80, right: 70, bottom: 80, left: 90};
 const width = 1000 - margin.left - margin.right,
       height = 550 - margin.top - margin.bottom;
 
-const svg = d3.select("body")
+const container = d3.select("body").append("div").attr("id", "container");
+
+const svg = d3.select("#container")
               .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)

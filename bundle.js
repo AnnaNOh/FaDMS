@@ -9447,7 +9447,9 @@ const margin = {top: 80, right: 70, bottom: 80, left: 90};
 const width = 1000 - margin.left - margin.right,
       height = 550 - margin.top - margin.bottom;
 
-const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body")
+const container = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("body").append("div").attr("id", "container");
+
+const svg = __WEBPACK_IMPORTED_MODULE_0_d3__["g" /* select */]("#container")
               .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)

@@ -12,6 +12,10 @@ body {
   border-right: 1px solid black;
 }
 
+/*.everything {
+  margin: auto auto;
+}*/
+
 .title {
   margin: 0 auto;
   padding-top: 50px;

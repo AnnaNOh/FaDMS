@@ -7,22 +7,22 @@
     <link rel="stylesheet" href="movies.css">
   </head>
   <body>
+      <h2 class="title">FaDMS - Foreign and Domestic Movie Statistics</h2>
+      <p class="paragraph">As foreign markets for movies improve, it becomes more and more important for Hollywood to adapt to these changing tastes. Here are the some of the biggest box office hits in history and their foreign and domestic box office numbers.</p>
 
-    <h2 class="title">FaDMS - Foreign and Domestic Movie Statistics</h2>
-    <p class="paragraph">As foreign markets for movies improve, it becomes more and more important for Hollywood to adapt to these changing tastes. Here are the some of the biggest box office hits in history and their foreign and domestic box office numbers.</p>
 
+      <div class="plot">
+      </div>
 
-    <div class="plot">
-    </div>
+      <script src="bundle.js"></script>
 
-    <script src="bundle.js"></script>
+      <div class="data-selector">
+        <form class="form-data-selector" action="index.html" method="post">
+          <input type="radio" name="data-selector" value="giants">Top 100 Box Office Giants
+          <input type="radio" name="data-selector" value="imdb" checked>IMDb Top Rated 250
+          <input type="radio" name="data-selector" value="oscars">Academy Award Best Picture Winners
+        </form>
+      </div>
 
-    <div class="data-selector">
-      <form class="form-data-selector" action="index.html" method="post">
-        <input type="radio" name="data-selector" value="giants">Top 100 Box Office Giants
-        <input type="radio" name="data-selector" value="imdb" checked>IMDb Top Rated 250
-        <input type="radio" name="data-selector" value="oscars">Academy Award Best Picture Winners
-      </form>
-    </div>
   </body>
 </html>
