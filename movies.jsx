@@ -241,8 +241,6 @@ function ready(error, imdb, giants, oscars){
     else {movies = imdb;}
     console.log(movies);
 
-
-
     movies.forEach(function(d){
       d.Year = Number(d.Year);
       d.Budget = Number(d.Budget);
