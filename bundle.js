@@ -9483,6 +9483,7 @@ let AllMovieInfo = [];
 __WEBPACK_IMPORTED_MODULE_0_d3__["e" /* queue */]()
   .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* csv */], "data/imdb250.csv")
   .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* csv */], "data/boxoffice.csv")
+  .defer(__WEBPACK_IMPORTED_MODULE_0_d3__["c" /* csv */], "data/oscars.csv")
   .await(ready);
 
 // once data is fetched, then do stuff

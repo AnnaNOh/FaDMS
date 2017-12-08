@@ -45,6 +45,7 @@ let AllMovieInfo = [];
 d3.queue()
   .defer(d3.csv, "data/imdb250.csv")
   .defer(d3.csv, "data/boxoffice.csv")
+  .defer(d3.csv, "data/oscars.csv")
   .await(ready);
 
 // once data is fetched, then do stuff
