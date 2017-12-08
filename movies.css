@@ -6,25 +6,23 @@ html, body {
 body {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  width: 1200px;
+  width: 1000px;
   margin: 0 auto;
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
 
 .title {
-  padding-top: 0.20em;
-  /*padding-bottom: 0.1em;*/
-  padding-left: 0.75em;
+  margin: 0 auto;
+  padding-top: 50px;
   font-family: "Lora";
   font-weight: 600;
   font-size: 40px;
-  margin-bottom: 0
+  width: 900px;
 }
 .paragraph {
-  width: 1000px;
-  padding-left: 2.5em;
-  padding-bottom: 1em;
+  width: 900px;
+  margin: 20px auto 30px auto;
   font-family: "Lora";
   font-size: 15px;
 }

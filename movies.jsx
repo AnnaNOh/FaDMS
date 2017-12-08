@@ -6,8 +6,8 @@ function round(value, decimals) {
 }
 
 const margin = {top: 80, right: 70, bottom: 80, left: 90};
-const width = 1200 - margin.left - margin.right,
-      height = 700 - margin.top - margin.bottom;
+const width = 1000 - margin.left - margin.right,
+      height = 550 - margin.top - margin.bottom;
 
 const svg = d3.select("body")
               .append("svg")
@@ -80,9 +80,9 @@ function ready(error, imdb, giants, oscars){
   x.domain([1962, 2017]);
   y.domain([80, 0]);
 
-// Making the scatterplot
+  // positioning tooltips
   let logscale = 10000000;
-  let tooltipLeft = (d) => 200 + margin.left + d.AYear;
+  let tooltipLeft = (d) => 330 + margin.left + d.AYear;
   let tooltipTop = (d) => 50 + margin.top + height - (height * d.PerFRevenue/maxY);
   let spaceTop = 28;
   let tooltipTop2 = (d) => spaceTop + tooltipTop(d);
@@ -92,7 +92,8 @@ function ready(error, imdb, giants, oscars){
   // color function
   let color1 = d3.scaleLinear().domain([1960, 2017]).range(["red", "blue"]);
 
-
+// Making the scatterplot
+// Makes circles per movie and adds the hover over effect
   svg.selectAll("circle")
   .data(movies)
   .enter()
@@ -121,6 +122,8 @@ function ready(error, imdb, giants, oscars){
       .style('opacity', .9);
 
 
+// Hover over tool tip positioning and styling
+// Rephrase numbers into words
     let tooltip2Data = function(e) {
       if (e > 1000000000 ) return `${round(e/1000000000, 2)} B`;
       else if (e > 1000000) return `${round(e/1000000, 2)} mil`;
@@ -128,7 +131,6 @@ function ready(error, imdb, giants, oscars){
     };
     tooltip.text(`${d.Movie} (${d.Year})`)
       .style("width", "100")
-      // .style("text-overflow", "ellipsis")
       .style("position", "absolute")
       .style('left', `${tooltipLeft(d)}px`)
       .style('top', `${tooltipTop(d)}px`)
@@ -204,7 +206,7 @@ function ready(error, imdb, giants, oscars){
 
   // Spacing out the Y Axis Label
   let xAxisTopText = -55;
-  let yAxisTopText1 = -45;
+  let yAxisTopText1 = -55;
   let yAxisTopText2 = yAxisTopText1 + 15;
   let yAxisTopText3 = yAxisTopText2 + 15;
   svg.append("g")
@@ -232,7 +234,7 @@ function ready(error, imdb, giants, oscars){
       .attr("y", `${yAxisTopText3}px`);
 
 
-
+// If a different movie subgroup is selected, change the movies to reflect the change.
   d3.selectAll("input").on("change", function(){
     movies = {};
     let result = d3.select("input[type=radio]:checked").node().value;
@@ -258,6 +260,7 @@ function ready(error, imdb, giants, oscars){
       d.AYear = (d.Year - oldestYear) / ((2017 - oldestYear)/width);
 
 
+      // Done to deal with difference in list length and extra circles.
       if (d.Movie === ""){
         d.Year = 2030;
         d.WWBO = logscale;
@@ -268,7 +271,7 @@ function ready(error, imdb, giants, oscars){
       }
   });
 
-
+// Adjust color to make data pop more depending on the selection
   let minX = d3.min(movies, function(d) { return d.Year; });
   if (minX < 1960){ minX = 1960;}
   color1 = d3.scaleLinear().domain([minX, 2017]).range(["red", "blue"]);
@@ -287,12 +290,6 @@ function ready(error, imdb, giants, oscars){
         return height - (d.PerFRevenue/maxY * height); })
       .style('fill', (d) => color1(d.Year));
 
-    // set the ranges
-    // x = d3.scaleLinear().domain([minX, 2017]).range([0, width]).ticks();
-    // y = d3.scaleLinear().domain([maxY, 0]).rangeRound([0, height]).ticks();
-    //
-    // svg.select("#xAxis").transition().duration(1000).call(d3.axisBottom(x));
-    // svg.select("#axisLeft").transition().duration(1000).call(d3.axisLeft(y));
   });
 
 
