@@ -1,7 +1,7 @@
 # Movies-Return-on-Investment
 
 ## Foreign and Domestic Movie Statistics (FaDMS)
-#### Live: [FaDMS](https://annanoh.github.io/Movies-Return-on-Investment/)
+#### Live: [FaDMS](https://annanoh.github.io/FaDMS/)
 
 ## Background and Overview
   FaDMS is a data visualization of the differing levels of success movies have in foreign and domestic markets. As the number of movie consumers in foreign markets grow, it is imperative to understand what movies are successful not just at home, but overseas as well.
